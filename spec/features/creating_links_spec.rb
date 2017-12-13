@@ -19,5 +19,4 @@ feature "User can create a new bookmark"  do
       expect(page).to have_content('Google')
     end
   end
-
 end

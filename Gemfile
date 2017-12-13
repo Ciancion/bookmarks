@@ -10,3 +10,6 @@ gem 'dm-migrations'
 gem 'capybara'
 gem 'sinatra'
 gem 'database_cleaner'
+gem 'pg'
+gem 'rails_12factor', group: :production
+gem 'rails'
