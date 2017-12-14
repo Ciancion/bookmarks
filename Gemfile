@@ -13,3 +13,4 @@ gem 'database_cleaner'
 gem 'pg'
 gem 'rails_12factor', group: :production
 gem 'rails'
+gem 'rake'
