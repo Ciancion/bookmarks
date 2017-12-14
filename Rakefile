@@ -1,6 +1,6 @@
 
 require 'data_mapper'
-require 'db_migrations'
+require 'dm-migrations'
 require './app/app'
 namespace db do
   task :automigrate do
