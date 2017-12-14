@@ -24,7 +24,8 @@ class BookmarkManagerApp < Sinatra::Base
   end
 
   post '/links' do
-    link =  Link.start(params[:link_name], params[:link_url], params[:link_tag])
+    tags_list = params[:link_tag].split ", "
+    link =  Link.start(params[:link_name], params[:link_url], tags_list)
     redirect '/links'
   end
 

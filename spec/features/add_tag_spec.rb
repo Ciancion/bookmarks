@@ -18,4 +18,15 @@ feature 'User can tag links' do
 
    expect(page).to have_content 'testing'
   end
+
+  scenario 'Check multiple tags for a link' do
+    visit('/links/new')
+    fill_in "link_name", with: "Google"
+    fill_in "link_url", with: "http://www.google.com"
+    fill_in 'link_tag', with: 'tag1, tag2'
+    click_button "Submit"
+
+    expect(page).to have_content("tag1")
+    expect(page).to have_content("tag2")
+  end
 end

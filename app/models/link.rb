@@ -7,23 +7,30 @@ class Link
 
   has n, :tags, :through => Resource
 
-   def self.start(name, url, tag_name, tag_class: Tag)
+   def self.start(name, url, tags_name, tag_class: Tag)
+       some_tags =tags_name.map{|tag_name| create_tag(tag_name, tag_class)}
 
-     if (tag = tag_class.all.select{|tag| tag_name == tag.tag_name}) == []
-       tag = tag_class.create(tag_name: tag_name)
-     else
-       tag = tag.first
-     end
        link = create(link_name: name, link_url: url)
-       link.tags << tag
+
+       link.tags += some_tags
        link.save
-       p link.tags
    end
+
+
 
    def self.filter(tag_name)
      all.select do |link|
        link.tags.map{|tag| tag.tag_name}.include?(tag_name)
      end
    end
+
+ private
+    def self.create_tag tag_name, tag_class
+      if (tag = tag_class.all.select{|tag| tag_name == tag.tag_name}) == []
+        tag = tag_class.create(tag_name: tag_name)
+      else
+        tag = tag.first
+      end
+    end
 
 end
