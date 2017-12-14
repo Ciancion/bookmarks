@@ -7,15 +7,27 @@ require 'dm-postgres-adapter'
 require_relative './models/db_helper.rb'
 require_relative "./models/tag.rb"
 require_relative "./models/link.rb"
+require_relative "./models/user.rb"
 
 db_initialize
 
 
 class BookmarkManagerApp < Sinatra::Base
+  enable :sessions
+
+  get '/' do
+    erb :'login'
+  end
+
+  post '/login' do
+    session[:user_id] = User.create(email: params[:email], password_hash: params[:password]).id
+    redirect '/links' 
+  end
 
   get "/links" do
+    @email = User.all.select{|user| user.id == session[:user_id] }.first.email if session[:user_id]
     @links = Link.all
-  erb :'links/index'
+    erb :'links/index'
   end
 
   get '/links/new' do
@@ -34,8 +46,6 @@ class BookmarkManagerApp < Sinatra::Base
     @links = Link.filter(@tag)
   erb :'/tags'
   end
-
-
 
 
 # run if file is run directly by Ruby
