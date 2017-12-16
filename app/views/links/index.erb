@@ -7,7 +7,6 @@
   <% @links.each do |link| %>
     <li> Name: <%=link.link_name%>
         URL: <%=link.link_url%>
-        <% p link.tags %>
         Tags: <% link.tags.each { |tag| %>
           <%= "#{tag.tag_name}" %>
           <% } %>

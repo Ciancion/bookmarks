@@ -11,7 +11,6 @@ require_relative "./models/user.rb"
 
 db_initialize
 
-
 class BookmarkManagerApp < Sinatra::Base
   enable :sessions
 
@@ -21,30 +20,42 @@ class BookmarkManagerApp < Sinatra::Base
 
   post '/login' do
     session[:user_id] = User.create(email: params[:email], password_hash: params[:password]).id
-    redirect '/links' 
+    redirect '/links'
   end
 
   get "/links" do
-    @email = User.all.select{|user| user.id == session[:user_id] }.first.email if session[:user_id]
+    if session[:user_id]
+      user = User.all.select { |user| user.id == session[:user_id] }.first
+
+      if user
+        @email = user.email
+      else
+        puts 'cannot find user'
+        redirect '/'
+      end
+    end
+
     @links = Link.all
+
     erb :'links/index'
   end
 
   get '/links/new' do
-
-   erb :'links/new'
+    erb :'links/new'
   end
 
   post '/links' do
-    tags_list = params[:link_tag].split ", "
+    tags_list = params[:link_tag].split(", ")
     link =  Link.start(params[:link_name], params[:link_url], tags_list)
+
     redirect '/links'
   end
 
   get '/tags/:tag' do
     @tag = params[:tag]
     @links = Link.filter(@tag)
-  erb :'/tags'
+
+    erb :'/tags'
   end
 
 
